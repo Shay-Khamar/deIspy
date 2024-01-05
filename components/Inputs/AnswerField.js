@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, Image, StyleSheet, TextInput  } from 'react-native'
-import colours from '../colours';
+import colours from '../../colours';
 
 const AnswerField = ({ placeholder, onChangeText, value,}) => {
   return (
@@ -19,23 +19,22 @@ const styles = StyleSheet.create({
 
   searchBar: {
     position: 'relative',
-    height: 40,
+    height: '10%', // Fixed height for the AnswerField
     width: '75%',
     margin: 12,
-    //backgroundColor: 'grey'
+    // backgroundColor: 'grey'
   },
 
   input: {
-      flex: 1,
-        borderWidth: 3,
-        padding: '4%',
-        borderColor: colours.primaryColour,
-        borderRadius: 20,
-        backgroundColor: colours.secondaryColour,
-        paddingRight: 40, // Ensure space for the icon on the right
-        fontWeight: 'bold',
-        fontSize: 15,
-        color: colours.textColour,
+    borderWidth: 3,
+    padding: '4%',
+    borderColor: colours.primaryColour,
+    borderRadius: 20,
+    backgroundColor: colours.secondaryColour,
+    paddingRight: 40, // Ensure space for the icon on the right
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: colours.textColour,
   }
    
 });

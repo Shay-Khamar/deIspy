@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button, Image, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
-import CameraButton from './Buttons/CameraButton';
-import IconButton from './Buttons/IconButton';
+import CameraButton from '../Buttons/CameraButton';
+import IconButton from '../Buttons/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 
 const CameraComponent = ({ onPictureTaken }) => {
@@ -67,7 +67,9 @@ const CameraComponent = ({ onPictureTaken }) => {
         <View style={styles.container}>
             {capturedImage ? ( // Display the captured image
                 <View style={styles.cameraContainer}>
-                    <Image style={styles.camera} source={{ uri: capturedImage }} />
+                    <Image style={[styles.camera, { width: cameraWidth, height: cameraHeight }]}
+                    source={{ uri: capturedImage }} 
+                    />
                 </View>
             ) : (
                 cameraPermission && (
@@ -78,11 +80,18 @@ const CameraComponent = ({ onPictureTaken }) => {
                                 type={cameraType}
                                 ref={handleCameraRef}
                             >
-                                <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" color="#FF6347" />
                             </Camera>
                         </View>
+                        <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" color="#FF6347" />
                         <View style={styles.takePictureButton}>
-                        <IconButton onTouch={takePictureAsync} iconName="camera" color="#FF6347" iconSize={24} />
+                        <CameraButton 
+                        onTouch={takePictureAsync} 
+                        color="#FF6347" 
+                        textColor="white" 
+                        iconName="ios-camera" 
+                        iconSize={60}
+                        size={93} 
+                        />
                         </View>
                     </>
                 )
@@ -93,14 +102,18 @@ const CameraComponent = ({ onPictureTaken }) => {
 
 const styles = StyleSheet.create({
     cameraContainer: {
-        overflow: 'hidden', // Prevent children from overflowing
+        //overflow: 'hidden', // Prevent children from overflowing
         borderRadius: 20,
     },
     camera: {
-        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
     },
 
     takePictureButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
         
     },
 });

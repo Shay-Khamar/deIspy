@@ -1,12 +1,27 @@
+/**
+ * Guess counter component
+ */
+
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 
-const windowWidth = Dimensions.get('window').width;
+/** 
+ * Get device dimensions
+*/
+const windowWidth = Dimensions.get('window').width; 
 const windowHeight = Dimensions.get('window').height;
 
-const squareSize = Math.min(windowWidth, windowHeight) * 0.25; // 20% of the smaller dimension
+/**
+ * Calculate square size based on smaller dimension
+ */
+const squareSize = Math.min(windowWidth, windowHeight) * 0.25; 
 
+/**
+ * Guess counter functional component
+ * @param {number} chancesLeft - Chances remaining
+ */
 const GuessCounter = ({ chancesLeft }) => {
+
     return (
         <View style={[styles.container, { width: squareSize, height: squareSize }]}>
             <Text style={styles.text}>{chancesLeft}</Text>
@@ -14,6 +29,9 @@ const GuessCounter = ({ chancesLeft }) => {
     );
 };
 
+/**
+ * Component styles
+ */
 const styles = {
     container: {
         backgroundColor: 'lightgray',
@@ -23,7 +41,7 @@ const styles = {
         alignItems: 'center',
     },
     text: {
-        fontSize: 40,
+        fontSize: 50,
         fontWeight: 'bold',
     },
 };
