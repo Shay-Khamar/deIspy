@@ -207,9 +207,9 @@ const VisionTester = () => {
           <HintText selectedItem={selectedItem} />
           <View style={styles.answerField}>
             <AnswerField
-              placeholder="enter your guess here"
               onChangeText={(text) => setGuess(text)}
               value={guess}
+              selectedItem={selectedItem}
             />
             <IconButton
               onTouch={handleGuess}
