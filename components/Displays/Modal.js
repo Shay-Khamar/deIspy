@@ -14,7 +14,7 @@ import CameraButton from '../Buttons/CameraButton';
  * @param {string} message - Message to display 
  * @param {string} header - Modal header text
  */
-const Modal = forwardRef(({ visible, goBackButton, tryAgainButton, message, header = 'PLACEHOLDER' }, ref) => {
+const Modal = forwardRef(({ visible, button2, button1, message, header = 'PLACEHOLDER', button1Text = "TRY AGAIN", button2Text = "GO BACK" }, ref) => {
 
   /**
    * Animated value for scale animation
@@ -81,11 +81,11 @@ const Modal = forwardRef(({ visible, goBackButton, tryAgainButton, message, head
         <View style={[styles.wrap]} >
           <Text style={[styles.headerText]}>{header}</Text>
           <Text style={[styles.description]}>
-            {message} Something I typed up to fill the space this was more difficult than I thought, ran out of ideas straight away damn!
+            {message}
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 64 }}>
-            <CameraButton onTouch={tryAgainButton} color="#FFA500" textColor="white" text="TRY AGAIN" size={40} iconName="reload-sharp" iconSize={20} />
-            <CameraButton onTouch={goBackButton} color="#FFA500" textColor="white" text="GO BACK" size={40} iconName="arrow-back-sharp" iconSize={20} />
+            <CameraButton onTouch={button1} color="#FFA500" textColor="white" text={button1Text} size={40} iconName="reload-sharp" iconSize={20} />
+            <CameraButton onTouch={button2} color="#FFA500" textColor="white" text={button2Text} size={40} iconName="arrow-back-sharp" iconSize={20} />
           </View>
         </View>
       </Animated.View>

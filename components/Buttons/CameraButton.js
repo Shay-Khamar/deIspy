@@ -64,12 +64,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     textAlign: 'center',
-    width: '100%', // Ensures the text takes full width within its container
+    width: '100%', 
   },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-     // Adjust this margin based on your layout preference
+     
   },
 });
 

@@ -10,6 +10,7 @@ const CameraComponent = ({ onPictureTaken }) => {
     const [camera, setCamera] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
     const [capturedImage, setCapturedImage] = useState(null);
+    
 
 
 
