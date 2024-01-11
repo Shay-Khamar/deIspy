@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import colours from '../../colours'
 
 import Instructions from '../TextElements/Instructions'
 
@@ -27,12 +28,12 @@ const styles = StyleSheet.create({
     header: {
         height: 60,
         alignItems: 'center',
-        justifyContent: 'center', 
+        justifyContent: 'center',
     },
     headerText: {
         fontSize: 45,
         fontWeight: 'bold',
-        color: 'black',
+        color: colours.textColour,
         fontFamily: 'sans-serif',
     },
 

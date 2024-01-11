@@ -15,12 +15,11 @@ const colours = {
     ForestGreen: '#228B22',
     ////////// The main colours and themes I want to use for my UI
     
-    textColour: '#200d04',              // Dark brownish text color
-    backgroundColour: '#fdf4ee',       // Creamy off-white background color
-    backgroundColourDarker: '#111111',  // Very dark almost black background color
-    primaryColour: '#e46a2e',          // Orange primary/brand color
-    secondaryColour: '#e6f088',        // Pale yellow secondary color
-    accentColour: '#c1eb5e',           // Light green accent color
+    textColour: '#030609',            // Dark blackish text color
+    backgroundColour: '#f6f9fc',      // Light grayish background color
+    primaryColour: '#528cc5',         // Blue primary/brand color
+    secondaryColour: '#b69fdf',       // Light purple secondary color
+    accentColour: '#ad6acd',          // Purple accent color
 
 
 };

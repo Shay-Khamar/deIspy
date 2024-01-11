@@ -25,6 +25,8 @@ import HintText from '../Displays/HintText';
 import ToastMessage from '../Displays/ToastMessage';
 import Modal from '../Displays/Modal';
 import callGoogleVisionAsync from '../API/GoogleVisionsAPI';
+import colours from '../../colours';
+import { useNavigation } from '@react-navigation/native';
 
 // Import Google Vision API call
 
@@ -34,7 +36,7 @@ import callGoogleVisionAsync from '../API/GoogleVisionsAPI';
  */
 const VisionTester = ({route}) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [guess, setGuess] = useState('');
+  const [guess, setGuess] = useState(''); 
   const [remainingGuesses, setRemainingGuesses] = useState(3);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [showToast, setShowToast] = useState(false);
@@ -49,12 +51,9 @@ const VisionTester = ({route}) => {
   const [imageAspectRatio, setImageAspectRatio] = useState(1);
   const [modifiedSelectedItem, setModifiedSelectedItem] = useState(null);
 
-  useEffect(() => {
-    if (route.params?.imageBase64) {
-        handlePictureTaken(route.params.imageBase64);
-    }
-}, [route.params?.imageBase64]);
+  const navigation = useNavigation();
 
+  
   
 
 
@@ -75,6 +74,19 @@ const VisionTester = ({route}) => {
       
 
   };
+
+  const returnToHomeScreen = () => {
+    navigation.navigate('HomeTab');
+}
+
+
+  useEffect(() => {
+    const base64Image = route.params?.imageBase64;
+    if (base64Image) {
+      handlePictureTaken(base64Image);
+    }
+  }, [route.params?.imageBase64]);
+
 
   const onModalHide = () => {
     closeModal();
@@ -193,17 +205,17 @@ const VisionTester = ({route}) => {
                 setToastMessage('');
               }}
             />
-            <HintText selectedItem={selectedItem} />
             {capturedImage && (
               <Image
                 source={{ uri: capturedImage }}
                 style={[styles.capturedImage, { aspectRatio: imageAspectRatio }]}
               />
             )}
+              <HintText selectedItem={selectedItem} />
                 <View style={styles.answerField}>
                   <AnswerField onChangeText={(text) => setGuess(text)} value={guess} selectedItem={selectedItem} isEnabled={selectedItem != null} opacity={selectedItem ? 1 : 0.5}/>
                   <View style={{ opacity: selectedItem ? 1 : 0.5 }}>
-                  <IconButton onTouch={handleGuess} iconName="ios-checkbox" color="#FF6347" iconSize={55}/>
+                  <IconButton onTouch={handleGuess} iconName="ios-checkbox" iconColor={colours.accentColour} iconSize={55}/>
                   </View>
               </View>
             <View style={styles.footer}>
@@ -217,6 +229,7 @@ const VisionTester = ({route}) => {
                   visible={modalVisible}
                   header={modalHeader}
                   button1={resetGame}
+                  button2={returnToHomeScreen}
                   message={modalMessage}
                 />
             </View>
@@ -231,9 +244,11 @@ const VisionTester = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colours.backgroundColour,
   },
   scrollContainer: {
     flexGrow: 1,
+    backgroundColor: colours.backgroundColour,
   },
   content: {
     flex: 1,

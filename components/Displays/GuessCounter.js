@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
+import colours from '../../colours';
 
 /** 
  * Get device dimensions
@@ -23,9 +24,13 @@ const squareSize = Math.min(windowWidth, windowHeight) * 0.25;
 const GuessCounter = ({ chancesLeft }) => {
 
     return (
+        <>
+        <Text style={styles.label}>Chances:</Text>
         <View style={[styles.container, { width: squareSize, height: squareSize }]}>
+            
             <Text style={styles.text}>{chancesLeft}</Text>
         </View>
+        </>
     );
 };
 
@@ -34,7 +39,7 @@ const GuessCounter = ({ chancesLeft }) => {
  */
 const styles = {
     container: {
-        backgroundColor: 'lightgray',
+        backgroundColor: colours.secondaryColour,
         padding: 15,
         borderRadius: 5,
         justifyContent: 'center',
@@ -42,6 +47,11 @@ const styles = {
     },
     text: {
         fontSize: 50,
+        fontWeight: 'bold',
+    },
+
+    label: {
+        fontSize: 23,
         fontWeight: 'bold',
     },
 };

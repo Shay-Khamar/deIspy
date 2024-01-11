@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 3,
     borderRadius: 20,
-    overflow: 'hidden', 
+    overflow: 'hidden',
+    backgroundColor: colours.lightWarmGray
   },
   underscoreContainer: {
     flexDirection: 'row',
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
   underscoreText: {
     fontSize: 20,
     marginHorizontal: 2,
+    fontWeight: 'bold', 
   },
   input: {
     position: 'absolute', 

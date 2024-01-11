@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import colours from '../../colours';
 
 const Instructions = ({text,iconName, color ='black'}) => {
   return (
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: 'sans-serif',
         fontSize: 16,
+        color: colours.textColour,
         // Add more styling as needed
       },
 

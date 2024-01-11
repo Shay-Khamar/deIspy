@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animatable from 'react-native-animatable';
 import { useFonts } from 'expo-font';
+import colours from '../../colours';
 
 /**
  * Functional component to display hint text
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
       fontSize: 26,
       marginBottom: 10,
       fontWeight: 'bold',
+        color: colours.textColour,
     },
 });
 

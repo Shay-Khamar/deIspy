@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import CameraButton from '../Buttons/CameraButton';
 import IconButton from '../Buttons/IconButton';
 import { Ionicons } from '@expo/vector-icons';
+import colours from '../../colours';
 
 const CameraComponent = ({ onPictureTaken }) => {
     const [cameraPermission, setCameraPermission] = useState(null);
@@ -105,10 +106,10 @@ const CameraComponent = ({ onPictureTaken }) => {
                 ref={handleCameraRef}
                 />
                 <View style={styles.toggleCameraButton}>
-                 <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" color="#FF6347" />
+                 <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" iconColor={colours.accentColour} iconSize={30} />
                  </View>
                     <View style={styles.takePictureButton}>
-                        <CameraButton onTouch={takePictureAsync} color="#FF6347" textColor="white" iconName="ios-camera" iconSize={60} size={93} />
+                        <CameraButton onTouch={takePictureAsync} color={colours.primaryColour} textColor="white" iconName="ios-camera" iconSize={60} size={93} text={'PRESS ME !'} />
                     </View> 
                 </>
             )}
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
         position: 'absolute', // Position over the camera view
         top: 20, // Spacing from the top, adjust as needed
         alignSelf: 'center', // Center horizontally
+        opacity: 0.7,
     },
 });
 export default CameraComponent;

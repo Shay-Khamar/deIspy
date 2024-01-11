@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     width: '100%', 
+    fontWeight: 'bold',
   },
   iconContainer: {
     alignItems: 'center',

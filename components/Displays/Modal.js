@@ -5,6 +5,7 @@
 import { StyleSheet, Text, View, Animated, Dimensions } from 'react-native';
 import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import CameraButton from '../Buttons/CameraButton';
+import colours from '../../colours';
 
 /**
  * Modal component
@@ -84,8 +85,8 @@ const Modal = forwardRef(({ visible, button2, button1, message, header = 'PLACEH
             {message}
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 64 }}>
-            <CameraButton onTouch={button1} color="#FFA500" textColor="white" text={button1Text} size={40} iconName="reload-sharp" iconSize={20} />
-            <CameraButton onTouch={button2} color="#FFA500" textColor="white" text={button2Text} size={40} iconName="arrow-back-sharp" iconSize={20} />
+            <CameraButton onTouch={button1} color={colours.accentColour} textColor={colours.textColour} text={button1Text} size={40} iconName="reload-sharp" iconSize={20} />
+            <CameraButton onTouch={button2} color={colours.accentColour} textColor={colours.textColour} text={button2Text} size={40} iconName="arrow-back-sharp" iconSize={20} />
           </View>
         </View>
       </Animated.View>
@@ -103,8 +104,8 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderRadius: 8,
-    backgroundColor: '#2D3953',
-    shadowColor: '#4048BF',
+    backgroundColor: colours.lightWarmGray,
+    shadowColor: 'black',
     shadowOffset: {
       width: 8.4,
       height: 8.4,
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: colours.textColour,
     textAlign: 'center',
   },
 
@@ -125,6 +126,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 64,
     fontSize: 16,
-    color: '#fff',
+    color: colours.textColour,
   },
 });

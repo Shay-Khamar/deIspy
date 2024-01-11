@@ -9,7 +9,7 @@ import { NavigationContainer, getFocusedRouteNameFromRoute  } from '@react-navig
 import colours from './colours';
 import { ThemedButton } from "react-native-really-awesome-button";
 import HowToPlay from './components/Screens/HowToPlay';
-
+import GalleryScreen from './components/Screens/GalleryScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -45,6 +45,7 @@ function StackNav() {
       <Stack.Screen options={{ headerShown: false}} name='HomeTab' component={HomeScreen}/>
       <Stack.Screen options={{ headerShown: false}} name='VisionTester' component={VisionTester}/>
       <Stack.Screen options={{ headerShown: false}} name='HowToPlay' component={HowToPlay}/>
+      <Stack.Screen name="GalleryScreen" component={GalleryScreen} />
     </Stack.Navigator>
   );
 }
