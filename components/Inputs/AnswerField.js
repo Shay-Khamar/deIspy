@@ -1,3 +1,16 @@
+
+/**
+ * Renders an answer field component.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.placeholder - The placeholder text for the input field.
+ * @param {function} props.onChangeText - The callback function to handle text changes.
+ * @param {string} props.value - The value of the input field.
+ * @param {string} props.selectedItem - The selected item.
+ * @param {boolean} props.isEnabled - Indicates whether the input field is enabled or disabled.
+ * @param {number} props.opacity - The opacity of the component.
+ * @returns {JSX.Element} The rendered AnswerField component.
+ */
 import React, {useRef} from 'react';
 import { View, Text, Button, Image, StyleSheet, TextInput,  TouchableWithoutFeedback, Dimensions  } from 'react-native'
 import colours from '../../colours';

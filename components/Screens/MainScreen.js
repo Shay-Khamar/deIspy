@@ -1,3 +1,5 @@
+
+
 /**
  * React Native components and utilities import
  */
@@ -34,7 +36,7 @@ import { useNavigation } from '@react-navigation/native';
  * Main component for Vision Tester
  * @returns {JSX.Element} - React component
  */
-const VisionTester = ({route}) => {
+const MainScreen = ({route}) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [guess, setGuess] = useState(''); 
   const [remainingGuesses, setRemainingGuesses] = useState(3);
@@ -53,32 +55,36 @@ const VisionTester = ({route}) => {
 
   const navigation = useNavigation();
 
-  
-  
-
-
   const modalRef = useRef(null);
 
+  /**
+   * Opens the modal
+   * @returns {void}
+   */
   const openModal = () => {
     if (modalRef.current) {
       modalRef.current.openAnimation();
     }
   };
 
+  /**
+   * Closes the modal
+   * @returns {void}
+   */
   const closeModal = () => {
       if (modalRef.current) {
         modalRef.current.closeAnimation();
         setModalVisible(false);
       }
-
-      
-
   };
 
+  /**
+   * Returns to the home screen
+   * @returns {void}
+   */
   const returnToHomeScreen = () => {
     navigation.navigate('HomeTab');
-}
-
+  }
 
   useEffect(() => {
     const base64Image = route.params?.imageBase64;
@@ -87,12 +93,19 @@ const VisionTester = ({route}) => {
     }
   }, [route.params?.imageBase64]);
 
-
+  /**
+   * Handles the action after the modal is hidden
+   * @returns {void}
+   */
   const onModalHide = () => {
     closeModal();
     setModalVisible(false);
   };
 
+  /**
+   * Resets the game
+   * @returns {void}
+   */
   const resetGame = () => {
     setSelectedItem(null);
     setGuess('');
@@ -215,7 +228,7 @@ const VisionTester = ({route}) => {
                 <View style={styles.answerField}>
                   <AnswerField onChangeText={(text) => setGuess(text)} value={guess} selectedItem={selectedItem} isEnabled={selectedItem != null} opacity={selectedItem ? 1 : 0.5}/>
                   <View style={{ opacity: selectedItem ? 1 : 0.5 }}>
-                  <IconButton onTouch={handleGuess} iconName="ios-checkbox" iconColor={colours.accentColour} iconSize={55}/>
+                  <IconButton onTouch={handleGuess} iconName="ios-checkbox" iconColor={colours.ace} iconSize={55}/>
                   </View>
               </View>
             <View style={styles.footer}>
@@ -287,4 +300,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default VisionTester;
+export default MainScreen;

@@ -1,3 +1,8 @@
+
+/**
+ * Renders the "How To Play" screen.
+ * @returns {JSX.Element} The rendered "How To Play" screen.
+ */
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import colours from '../../colours'
@@ -43,7 +48,6 @@ const styles = StyleSheet.create({
         paddingTop: '10%',
         marginBottom: '10%',
         paddingHorizontal: '10%',
-        // Add more styling as needed
       },
 
 })

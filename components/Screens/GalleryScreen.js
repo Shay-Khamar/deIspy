@@ -1,12 +1,25 @@
+
+
+/**
+ * @file GalleryScreen.js
+ * @desc A screen component for displaying and selecting images from the gallery.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { ThemedButton } from "react-native-really-awesome-button";
-import VisionTester from './VisionTester';
+import MainScreen from './MainScreen';
 import colours from '../../colours';
 
+/**
+ * @function GalleryScreen
+ * @desc A screen component for displaying and selecting images from the gallery.
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} The GalleryScreen component.
+ */
 const GalleryScreen = ({ navigation }) => {
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
 
@@ -17,8 +30,11 @@ const GalleryScreen = ({ navigation }) => {
     })();
   }, []);
 
-
-
+  /**
+   * @function requestGalleryPermission
+   * @desc Requests permission to access the device's gallery.
+   * @returns {Promise<void>} A promise that resolves once the permission is requested.
+   */
   const requestGalleryPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     setHasGalleryPermission(status === 'granted');
@@ -29,7 +45,11 @@ const GalleryScreen = ({ navigation }) => {
     }
   };
 
-
+  /**
+   * @function openGallery
+   * @desc Opens the device's gallery and allows the user to select an image.
+   * @returns {Promise<void>} A promise that resolves once the image is selected or the operation is cancelled.
+   */
   const openGallery = async () => {
     if (hasGalleryPermission !== true) {
       console.log('Permission to access gallery was denied');
@@ -58,7 +78,7 @@ const GalleryScreen = ({ navigation }) => {
         );
   
         if (resizedImage.base64) {
-          navigation.navigate('VisionTester', {
+          navigation.navigate('MainScreen', {
             imageBase64: `data:image/jpeg;base64,${resizedImage.base64}`,
           });
         } else {
@@ -72,17 +92,9 @@ const GalleryScreen = ({ navigation }) => {
     }
   };
 
-
- 
-
-
- 
-
-  
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Gallery Screen (In developement!)</Text>
+      <Text style={styles.title}>Gallery Screen (In development!)</Text>
       <View style={styles.buttonContainer}>
         <ThemedButton
           name="bruce"
@@ -104,7 +116,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor : colours.backgroundColour,
-
   },
   title: {
     fontSize: 24,

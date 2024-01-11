@@ -4,6 +4,11 @@ import React from 'react'
 const API_KEY = 'AIzaSyDaoNemYFLYR_uJ17SXmoZGbGkwmOmXlyw';
 const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`;
 
+/**
+ * Calls the Google Vision API to perform object localization on an image.
+ * @param {string} image - The image content to be processed.
+ * @returns {Promise<Array<string>>} - A promise that resolves to an array of localized object names.
+ */
 const callGoogleVisionAsync = async (image) => {
     const body = {
         requests: [
