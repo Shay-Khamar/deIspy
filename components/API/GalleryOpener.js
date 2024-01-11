@@ -27,7 +27,7 @@ const GalleryOpener = ({ onImageSelected }) => {
     };
 
     return (
-        <Button title="Open Gallery" onPress={openGallery} />
+
     );
 };
 
