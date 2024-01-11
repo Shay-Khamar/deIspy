@@ -8,6 +8,32 @@ const AnswerField = ({ placeholder, onChangeText, value, selectedItem, isEnabled
   const screenWidth = Dimensions.get('window').width;
   const answerFieldWidth = screenWidth * 0.8;
 
+  const onChangeTextDirect = (text) => {
+    // Limit the input to the length of selectedItem (without spaces)
+    const modifiedText = text.substring(0, selectedItem.replace(/\s/g, '').length);
+    onChangeText(modifiedText);
+  };
+
+
+
+  const displayValue = () => {
+    let displayIndex = 0;
+    let displayText = '';
+
+    for (let i = 0; i < selectedItem.length; i++) {
+      if (selectedItem[i] === ' ') {
+        displayText += ' ';
+      } else if (displayIndex < value.length) {
+        displayText += value[displayIndex];
+        displayIndex++;
+      } else {
+        displayText += '_';
+      }
+    }
+
+    return displayText;
+  };
+
 
 
 
@@ -17,45 +43,26 @@ const AnswerField = ({ placeholder, onChangeText, value, selectedItem, isEnabled
     }
   };
 
-  const onChangeTextModified = (text) => {
-    let newText = '';
-    let inputIndex = 0;
-  
-    for (let i = 0; i < selectedItem.length; i++) {
-      if (selectedItem[i] === ' ') {
-        newText += ' ';
-      } else if (inputIndex < text.length && text[inputIndex] !== ' ') {
-        newText += text[inputIndex];
-        inputIndex++;
-      } else {
-        newText += '_';
-      }
-    }
-  
-    onChangeText(newText);
-  };
 
   return (
     <TouchableWithoutFeedback onPress={handleFieldPress} disabled={!isEnabled}>
     <View style={[styles.searchBar, { width: answerFieldWidth, opacity: opacity }]}>
       {selectedItem && (
         <View style={styles.underscoreContainer}>
-          {underscoreArray.map((char, index) => (
-            <Text key={index} style={styles.underscoreText}>
-              {char === ' ' ? ' ' : (value.length > index ? value.charAt(index) : '_')}
-            </Text>
+          {displayValue().split('').map((char, index) => (
+            <Text key={index} style={styles.underscoreText}>{char}</Text>
           ))}
         </View>
       )}
       <TextInput
         ref={inputRef}
         placeholder={placeholder}
-        onChangeText={onChangeText}
+        onChangeText={onChangeTextDirect}
         value={value}
         style={styles.input}
       />
     </View>
-    </TouchableWithoutFeedback>
+  </TouchableWithoutFeedback>
   );
 };
 

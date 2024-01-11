@@ -24,61 +24,9 @@ import IconButton from '../Buttons/IconButton';
 import HintText from '../Displays/HintText';
 import ToastMessage from '../Displays/ToastMessage';
 import Modal from '../Displays/Modal';
+import callGoogleVisionAsync from '../API/GoogleVisionsAPI';
 
-/**
- * Google Vision API key and endpoint URL
- */
-const API_KEY = 'AIzaSyDaoNemYFLYR_uJ17SXmoZGbGkwmOmXlyw';
-const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`;
-
-/**
- * Function to call Google Vision API asynchronously
- * @param {string} image - Base64 encoded image
- * @returns {Promise<Array>} - Array of recognized objects
- */
-async function callGoogleVisionAsync(image) {
-  const body = {
-    requests: [
-      {
-        image: {
-          content: image,
-        },
-        features: [
-          {
-            type: 'OBJECT_LOCALIZATION',
-            maxResults: 5,
-          },
-        ],
-      },
-    ],
-  };
-
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    const result = await response.json();
-    console.log('callGoogleVisionAsync -> results', result);
-
-    if (result.responses && result.responses.length > 0) {
-      const objects = result.responses[0].localizedObjectAnnotations.map(
-        (annotation) => annotation.name
-      );
-      return objects;
-    } else {
-      return [];
-    }
-  } catch (error) {
-    console.error('Error calling Google Vision API:', error.message);
-    return [];
-  }
-}
+// Import Google Vision API call
 
 /**
  * Main component for Vision Tester
@@ -96,6 +44,11 @@ const VisionTester = () => {
   const [cameraKey, setCameraKey] = useState(0);
   const [modalMessage, setModalMessage] = useState('');
   const [modalHeader, setModalHeader] = useState('');
+  const [showCamera, setShowCamera] = useState(true);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [imageAspectRatio, setImageAspectRatio] = useState(1);
+  const [modifiedSelectedItem, setModifiedSelectedItem] = useState(null);
+  
 
 
   const modalRef = useRef(null);
@@ -129,6 +82,7 @@ const VisionTester = () => {
     setToastMessage('');
     onModalHide();
     setCameraKey(prevKey => prevKey + 1); // Increment the key
+    setShowCamera(true);
   };
 
   /**
@@ -157,13 +111,19 @@ const VisionTester = () => {
   const handlePictureTaken = async (base64) => {
     try {
       const labels = await callGoogleVisionAsync(base64);
-
       if (labels && labels.length > 0) {
         const randomIndex = Math.floor(Math.random() * labels.length);
-        const selectedItem = labels[randomIndex];
-        console.log('Line 66 Selected item:', selectedItem);
-
-        setSelectedItem(selectedItem);
+        const originalSelectedItem = labels[randomIndex];
+        const modifiedSelectedItem = originalSelectedItem.replace(/\s/g, '').toLowerCase();
+  
+        console.log('Line 66 Selected item:', originalSelectedItem);
+        setCapturedImage(`data:image/jpeg;base64,${base64}`);
+        Image.getSize(`data:image/jpeg;base64,${base64}`, (width, height) => {
+          setImageAspectRatio(width / height);
+        });
+        setSelectedItem(originalSelectedItem);  // Use the original format with spaces
+        setModifiedSelectedItem(modifiedSelectedItem);  // Store the modified format without spaces
+        setShowCamera(false);
       } else {
         console.log('No items found in the response.');
       }
@@ -178,7 +138,7 @@ const VisionTester = () => {
    */
   const handleGuess = () => {
     if (selectedItem !== null) {
-      const isCorrectGuess = guess.toLowerCase() === selectedItem.toLowerCase();
+      const isCorrectGuess = guess.toLowerCase() === modifiedSelectedItem.toLowerCase();
 
       if(isCorrectGuess){
         setModalHeader('Correct!');
@@ -212,51 +172,49 @@ const VisionTester = () => {
       enabled
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={[styles.content, { paddingBottom: keyboardHeight, position: 'relative' }]}>
-        
-          <ToastMessage
-            message={toastMessage}
-            visible={showToast}
-            opacityValue={opacity}
-            onHide={() => {
-              setShowToast(false);
-              setToastMessage('');
-            }}
-          />
-          <HintText selectedItem={selectedItem} />
-          <View style={styles.answerField}>
-            <AnswerField
-              onChangeText={(text) => setGuess(text)}
-              value={guess}
-              selectedItem={selectedItem}
-              isEnabled={selectedItem != null}
-              opacity={selectedItem ? 1 : 0.5}
+        {showCamera ? (
+          <CameraComponent key={cameraKey} onPictureTaken={handlePictureTaken} />
+        ) : (
+          <View style={[styles.content, { paddingBottom: keyboardHeight, position: 'relative' }]}>
+            {/* Render other components only when the camera is not active */}
+            <ToastMessage
+              message={toastMessage}
+              visible={showToast}
+              opacityValue={opacity}
+              onHide={() => {
+                setShowToast(false);
+                setToastMessage('');
+              }}
             />
-            <View style={{ opacity: selectedItem ? 1 : 0.5 }}>
-            <IconButton
-              onTouch={handleGuess}
-              iconName="ios-checkbox"
-              color="#FF6347"
-              iconSize={55}
-            />
+            <HintText selectedItem={selectedItem} />
+            {capturedImage && (
+              <Image
+                source={{ uri: capturedImage }}
+                style={[styles.capturedImage, { aspectRatio: imageAspectRatio }]}
+              />
+            )}
+                <View style={styles.answerField}>
+                  <AnswerField onChangeText={(text) => setGuess(text)} value={guess} selectedItem={selectedItem} isEnabled={selectedItem != null} opacity={selectedItem ? 1 : 0.5}/>
+                  <View style={{ opacity: selectedItem ? 1 : 0.5 }}>
+                  <IconButton onTouch={handleGuess} iconName="ios-checkbox" color="#FF6347" iconSize={55}/>
+                  </View>
+              </View>
+            <View style={styles.footer}>
+              <View style={{opacity: selectedItem ? 1 : 0.5}}>
+                <GuessCounter chancesLeft={remainingGuesses} />
+              </View>
+            </View>
+            <View style={styles.modalContainer}>
+                <Modal
+                  ref={modalRef}
+                  visible={modalVisible}
+                  header={modalHeader}
+                  button1={resetGame}
+                  message={modalMessage}
+                />
             </View>
           </View>
-          <CameraComponent key={cameraKey} onPictureTaken={handlePictureTaken} />
-        </View>
-        <View style={styles.footer}>
-          <View style={{opacity: selectedItem ? 1 : 0.5}}>
-          <GuessCounter chancesLeft={remainingGuesses} />
-          </View>
-        </View>
-        <View style={styles.modalContainer}>
-            <Modal
-             ref={modalRef}
-             visible={modalVisible}
-             header={modalHeader}
-             button1={resetGame}
-             message={modalMessage}
-            />
-          </View>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -296,7 +254,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems:'center',
     justifyContent:'center',
-  }
+  },
+
+  capturedImage: {
+        width: '80%', // Adjust to desired width
+        height: undefined, // Adjust to desired height
+        borderRadius: 10, // Optional: for rounded corners
+        margin: 10, // Spacing from other elements
+  },
 });
 
 

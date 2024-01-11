@@ -10,6 +10,10 @@ const CameraComponent = ({ onPictureTaken }) => {
     const [camera, setCamera] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
     const [capturedImage, setCapturedImage] = useState(null);
+    const [isCameraMode, setIsCameraMode] = useState(true);
+    const [supportedRatios, setSupportedRatios] = useState([]);
+    const [selectedRatio, setSelectedRatio] = useState('16:9'); // Default to 16:9, will update based on device
+
     
 
 
@@ -21,9 +25,35 @@ const CameraComponent = ({ onPictureTaken }) => {
         })();
     }, []);
 
-    const handleCameraRef = (ref) => {
+
+    const handleCameraRef = async (ref) => {
         setCamera(ref);
+        if (ref) {
+            const ratios = await ref.getSupportedRatiosAsync();
+            setSupportedRatios(ratios);
+    
+            const screenRatio = screenWidth / screenHeight;
+            let closestRatio = ratios[0];
+            let minDiff = Number.MAX_VALUE;
+    
+            ratios.forEach(ratio => {
+                const parts = ratio.split(':').map(Number);
+                const cameraRatio = parts[0] / parts[1];
+                const diff = Math.abs(screenRatio - cameraRatio);
+    
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestRatio = ratio;
+                }
+            });
+    
+            setSelectedRatio(closestRatio); // Assuming you have a state to store this
+        }
     };
+
+
+    
+
 
     const toggleCameraType = () => {
         setCameraType(
@@ -45,7 +75,7 @@ const CameraComponent = ({ onPictureTaken }) => {
         }
 
         try {
-            const { base64 } = await camera.takePictureAsync({ base64: true });
+            const { base64 } = await camera.takePictureAsync({ base64: true, quality: 1,  });
 
             setCapturedImage(`data:image/jpeg;base64,${base64}`);
 
@@ -53,69 +83,62 @@ const CameraComponent = ({ onPictureTaken }) => {
         } catch (error) {
             console.error('Error taking picture or analyzing:', error.message);
         }
+        setIsCameraMode(false);
     };
 
 
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
-    const cameraWidth = screenWidth - 20 - (screenWidth % 2); // Adjust the width by subtracting 40 (20px padding on each side) and making it even
-    const cameraHeight = (cameraWidth - 20) * (3 / 4); // Assuming 4:3 aspect ratio
-
+  
     
 
     // Return the camera and toggle button
     return (
-        <View style={styles.container}>
-            {capturedImage ? ( // Display the captured image
-                <View style={styles.cameraContainer}>
-                    <Image style={[styles.camera, { width: cameraWidth, height: cameraHeight }]}
-                    source={{ uri: capturedImage }} 
-                    />
-                </View>
-            ) : (
-                cameraPermission && (
-                    <>
-                        <View style={[styles.cameraContainer, { width: cameraWidth, height: cameraHeight, marginTop: 20 }]}>
-                            <Camera
-                                style={[styles.camera, { width: cameraWidth, height: cameraHeight }]}
-                                type={cameraType}
-                                ref={handleCameraRef}
-                            >
-                            </Camera>
-                        </View>
-                        <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" color="#FF6347" />
-                        <View style={styles.takePictureButton}>
-                        <CameraButton 
-                        onTouch={takePictureAsync} 
-                        color="#FF6347" 
-                        textColor="white" 
-                        iconName="ios-camera" 
-                        iconSize={60}
-                        size={93} 
-                        />
-                        </View>
-                    </>
-                )
+        <View style={styles.cameraContainer}>
+            {isCameraMode && cameraPermission && (
+                <>
+                <Camera
+                 //style={{ flex: 1 }} // Full screen
+                style={{ width: screenWidth, height: screenHeight }}
+                type={cameraType}
+                ratio={selectedRatio}
+                ref={handleCameraRef}
+                />
+                <View style={styles.toggleCameraButton}>
+                 <IconButton onTouch={toggleCameraType} iconName="ios-camera-reverse" color="#FF6347" />
+                 </View>
+                    <View style={styles.takePictureButton}>
+                        <CameraButton onTouch={takePictureAsync} color="#FF6347" textColor="white" iconName="ios-camera" iconSize={60} size={93} />
+                    </View> 
+                </>
             )}
         </View>
-    );
+
+    )
 };
 
 const styles = StyleSheet.create({
     cameraContainer: {
         //overflow: 'hidden', // Prevent children from overflowing
-        borderRadius: 20,
+        flex: 1,
+        justifyContent: 'flex-end',
     },
     camera: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
+       flex: 1,
     },
 
     takePictureButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        position: 'absolute', // Position over the camera view
+        bottom: 20, // Spacing from the bottom
+        alignSelf: 'center', // Center horizontally
         
+    },
+
+    toggleCameraButton: {
+        position: 'absolute', // Position over the camera view
+        top: 20, // Spacing from the top, adjust as needed
+        alignSelf: 'center', // Center horizontally
     },
 });
 export default CameraComponent;
+
