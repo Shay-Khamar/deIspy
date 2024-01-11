@@ -32,7 +32,7 @@ import callGoogleVisionAsync from '../API/GoogleVisionsAPI';
  * Main component for Vision Tester
  * @returns {JSX.Element} - React component
  */
-const VisionTester = () => {
+const VisionTester = ({route}) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [guess, setGuess] = useState('');
   const [remainingGuesses, setRemainingGuesses] = useState(3);
@@ -48,6 +48,13 @@ const VisionTester = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [imageAspectRatio, setImageAspectRatio] = useState(1);
   const [modifiedSelectedItem, setModifiedSelectedItem] = useState(null);
+
+  useEffect(() => {
+    if (route.params?.imageBase64) {
+        handlePictureTaken(route.params.imageBase64);
+    }
+}, [route.params?.imageBase64]);
+
   
 
 

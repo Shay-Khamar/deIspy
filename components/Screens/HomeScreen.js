@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ThemedButton } from "react-native-really-awesome-button";
 import { useNavigation } from '@react-navigation/native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 
 
@@ -18,6 +20,28 @@ const HomeScreen = () => {
         }
 
 
+        const openGallery = async () => {
+            const options = {
+                storageOptions: {
+                    skipBackup: true,
+                    path: 'images',
+                },
+            };
+    
+            launchImageLibrary(options, async (response) => {
+                if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                } else {
+                    // Convert the image URI to a base64 string
+                    const base64 = await FileSystem.readAsStringAsync(response.uri, { encoding: 'base64' });
+                    navigation.navigate('VisionTester', { imageBase64: `data:image/jpeg;base64,${base64}` });
+                }
+            });
+        };
+
+
 
 
 
@@ -32,8 +56,7 @@ const HomeScreen = () => {
             <View style={styles.buttonContainer}>
             <ThemedButton name="bruce" type="secondary" style={styles.button} width={100} onPressOut={htpButton}>How To Play</ThemedButton>
             <ThemedButton name="bruce" type="primary" style={styles.button} width={100} onPressOut={playButton}>Play</ThemedButton>
-            <ThemedButton name="bruce" type="secondary" style={styles.button} width={100}>Open Gallery </ThemedButton>
-            {/* Add your content here */}
+            <ThemedButton name="bruce" type="secondary" style={styles.button} width={100} onPressOut={openGallery}>Open Gallery </ThemedButton>
             </View>
         </View>
     );
